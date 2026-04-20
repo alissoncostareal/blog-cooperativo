@@ -5,20 +5,26 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    // Verificamos se o token existe ao carregar a página
-    const token = localStorage.getItem('token');
-    setIsLogged(!!token);
+    const checkAuth = () => {
+      const token = localStorage.getItem('access_token');
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+
+    window.addEventListener('auth-change', checkAuth);
+
+    return () => window.removeEventListener('auth-change', checkAuth);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLogged(false);
-    router.push('/'); // Volta para o feed após sair
-    // Se precisar forçar o refresh do estado do menu, o router.push já resolve
+    localStorage.removeItem('access_token');
+    window.dispatchEvent(new Event('auth-change'));
+    router.push('/');
   };
 
   return (
@@ -28,7 +34,7 @@ export default function Navbar() {
       </Link>
 
       <div className="flex gap-4">
-        {isLogged ? (
+        {isLoggedIn ? (
           <>
             <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
               Meus Posts

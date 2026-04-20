@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -19,6 +21,20 @@ class PostController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao buscar posts: ' . $e->getMessage()], 400);
         }
+    }
+
+    public function myPosts()
+    {
+        try {
+            $posts = \App\Models\Post::where('author_id', Auth::id())->get();
+            if ($posts->isEmpty()) {
+                return response()->json(['error' => 'Nehum post'], 400);
+            }
+            return response()->json($posts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar meus posts: ' . $e->getMessage()], 400);
+        }
+        return response()->json(Post::where('user_id', Auth::id())->get());
     }
 
     public function store(Request $request)

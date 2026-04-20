@@ -14,6 +14,7 @@ Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{id}', [PostController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/my-posts', [PostController::class, 'myPosts']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
