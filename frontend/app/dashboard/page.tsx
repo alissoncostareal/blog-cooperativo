@@ -60,7 +60,7 @@ export default function Dashboard() {
       {posts.length > 0 ? (
         posts.map(post => (
           <div key={post.id} className="border p-4 mb-4 rounded flex justify-between items-center bg-white shadow-sm">
-            <h2 className="font-semibold text-lg">{post.title}</h2> 
+            <h2 className="text-gray-700 font-semibold text-lg">{post.title}</h2> 
             <div className="flex gap-2">
               <Link href={`/dashboard/edit/${post.id}`} className="text-blue-500 hover:text-blue-700 font-medium">
                 Editar
