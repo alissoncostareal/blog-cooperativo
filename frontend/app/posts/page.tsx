@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
+import Link from 'next/dist/client/link';
 
 interface Author {
   name: string;
@@ -10,7 +11,6 @@ interface Author {
 interface Post {
   id: number;
   title: string;
-  content: string;
   created_at: string;
   author?: Author;
 }
@@ -28,7 +28,7 @@ export default function PostsPage() {
       })
       .catch((error) => {
         console.error("Erro ao buscar posts:", error);
-        setError("Não foi possível carregar os posts. Verifique a conexão com o servidor.");
+        setError("Nenhum post encontrado.");
         setLoading(false);
       });
   }, []);
@@ -52,15 +52,15 @@ export default function PostsPage() {
           {!error && posts.length > 0 ? (
             posts.map((post) => (
               <div key={post.id} className="rounded-lg bg-white p-6 shadow-sm border border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
-                <p className="mt-2 text-gray-600">{post.content}</p>
-                
-                {post.author && (
-                  <p className="mt-4 text-sm text-gray-400">Por: {post.author.name}</p>
-                )}
-                {post.created_at && (
-                  <p className="text-sm text-gray-400">Criado em: {new Date(post.created_at).toLocaleDateString()}</p>
-                )}
+                <Link href={`/posts/${post.id}`}>
+                  <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
+                  {post.author && (
+                    <p className="mt-4 text-sm text-gray-400">Por: {post.author.name}</p>
+                  )}
+                  {post.created_at && (
+                    <p className="text-sm text-gray-400">Criado em: {new Date(post.created_at).toLocaleDateString()}</p>
+                  )}
+                </Link>
               </div>
             ))
           ) : !error && (

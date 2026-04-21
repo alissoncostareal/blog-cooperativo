@@ -27,10 +27,8 @@ export default function LoginPage() {
         email,
         password,
       });
-      console.log("DADOS QUE O SERVIDOR ENVIOU:", response.data);
 
       localStorage.setItem('access_token', response.data.access_token);
-      console.log("TOKEN SALVO COM SUCESSO:", localStorage.getItem('access_token'));
       window.dispatchEvent(new Event('auth-change'));
       setFeedback({ message: 'Login realizado com sucesso! Redirecionando...', type: 'success' });
       

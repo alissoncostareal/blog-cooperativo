@@ -118,4 +118,30 @@ class PostController extends Controller
             return response()->json(['error' => 'Erro ao deletar post: ' . $e->getMessage()], 400);
         }
     }
+
+    public function getReportData()
+    {
+        try {
+            $driver = DB::connection()->getDriverName();
+            $rawSql = ($driver === 'sqlite')
+                ? "strftime('%Y-%m', created_at) as month, count(*) as count"
+                : "DATE_FORMAT(created_at, '%Y-%m') as month, count(*) as count";
+            $posts = \App\Models\Post::where('created_at', '>=', now()->subYear())
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+            $chartData = Post::selectRaw($rawSql)
+            ->where('created_at', '>=', now()->subYear())
+            ->groupBy('month')
+            ->get();
+
+            return response()->json([
+                'list' => $posts,
+                'chart' => $chartData
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao gerar relatório: ' . $e->getMessage()], 400);
+        }
+    }
 }
