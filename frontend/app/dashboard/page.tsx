@@ -50,8 +50,6 @@ export default function Dashboard() {
 
   return (
     <main className="p-8 w-full mx-auto">
-      
-      {/* Cabeçalho com Botões de Ação */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Meus Posts</h1>
@@ -74,14 +72,12 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Área de Feedback (Sucesso/Erro) */}
       {feedback.message && (
         <div className={`mb-6 p-4 rounded-lg ${feedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
           {feedback.message}
         </div>
       )}
       
-      {/* Lista de Posts */}
       {posts.length > 0 ? (
         <div className="space-y-4">
           {posts.map(post => (
